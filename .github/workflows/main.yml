@@ -28,3 +28,14 @@ jobs:
         
       - name: Running Integration Tests
         run: bat src/test/resources/integration/bat.dwl
+
+      # Print JSON report contents directly in the step console
+      - name: Print BAT Test Report
+        if: always() # Ensures the report prints even if tests fail
+        run: |
+          echo "=================== BAT TEST REPORT (JSON) ==================="
+          if ls /tmp/bat_report_*.json 1> /dev/null 2>&1; then
+            cat /tmp/bat_report_*.json | jq .
+          else
+            echo "No JSON report found at /tmp/bat_report_*.json"
+          fi
